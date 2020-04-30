@@ -40,5 +40,6 @@
 
 > Note: Adding cronjobs for below routines.
 
-- `main/routine.py`: Run every hour, every day
-- `main/update.py`: Run every 15 minutes.
+- `routine.py`: Run after every 2 hours, every day
+- `update.py`: Run after every 6 hours, every day
+- `clean.py`: Run every day at 12 am

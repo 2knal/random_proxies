@@ -6,29 +6,17 @@ from elasticsearch import helpers
 from time import time
 
 from proxies.cache_server.config import es
-from proxies.cache_server.config import fetch, parse_response
 from proxies.cache_server.config import is_good_proxy
 from proxies.cache_server.config import logger
 from proxies.cache_server.utils import add
-from proxies.cache_server.config import BASE_URL, SSL_URL, SOCKS_URL    
 
-def _check():
-    urls = [BASE_URL, SSL_URL, SOCKS_URL]
-    proxies = []
-    # Fetch all the proxies from these urls
-    for url in urls:
-        print('URL:', url)
-        res = fetch(url)
-        # Passing empty conditions so that
-        proxies.extend(parse_response(res, {}))
-
-    print('Total proxies: ', len(proxies))
-    # Check if they work
-    working_proxies = []
-    count = 0
+def _clean():
+    # Get all the proxies from proxies index
+    data = es.search(index='proxies', doc_type='proxy', body={'size': })
+    proxies = data['hits']['hits']
+    
+    # Delete those which arent good
     for proxy in proxies:
-        count += 1
-        print('Proxy count:', count)
         ip = proxy['ip address'] + ':' + proxy['port']
         # Implies SOCKS proxy
         if 'version' in proxy:
@@ -37,18 +25,19 @@ def _check():
 
         try:
             # Only if it works
-            if is_good_proxy(ip, protocol=protocol):
-                working_proxies.append(proxy)
+            if not is_good_proxy(ip, protocol=protocol):
+                # Delete from proxies index
+                es.delete(index='proxies', doc_type='proxy', id=ip)
+            
         except Exception as e:
+            # Delete from proxies index
+            es.delete(index='proxies', doc_type='proxy', id=ip)
             template = 'An exception of type {0} occurred.\nArguments: {1!r}'
             message = template.format(type(e).__name__, e.args)
             logger.error(message)
-    
-    return working_proxies
 
 if __name__ == '__main__':
     tic = time()
-    proxies = _check()
-    add(proxies, 'proxies')
+    _clean()
     tac = time()
-    print('Total time: [routine]', tac - tic)
+    print('Total time: [clean]', tac - tic)

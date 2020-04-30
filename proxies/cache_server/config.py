@@ -20,6 +20,7 @@ elastic_password = os.environ.get('ELASTIC_PASSWORD')
 elastic_username = 'elastic'
 
 elastic_uri = 'http://localhost:9200'
+MAX_SIZE = 10000
 
 # Setting up conn
 es = Elasticsearch([elastic_uri], http_auth=(elastic_username, elastic_password))
