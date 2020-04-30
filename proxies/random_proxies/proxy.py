@@ -12,7 +12,7 @@ def _select(proxies):
     if len(proxies) == 0:
         raise NoSuchProxyError('No proxy satisfying given conditions.')
     proxy = choice(proxies)
-    print('Selected proxy:', proxy, '\nLength:', len(proxies))
+    # print('Selected proxy:', proxy, '\nLength:', len(proxies))
     return proxy['ip address'] + ':' + proxy['port']
 
 def random_proxy(
@@ -52,6 +52,6 @@ def random_proxy(
                 ]
             }   
         }
-        print('Query:', query)
+        # print('Query:', query)
         # Fetch from db
         return pop(query)

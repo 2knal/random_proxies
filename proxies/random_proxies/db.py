@@ -6,6 +6,7 @@ from random import choice
 from proxies.cache_server.config import es
 from proxies.cache_server.config import MAX_SIZE
 from proxies.random_proxies.log import logger
+from proxies.random_proxies.exception NoSuchProxyError
 
 def pop(conditions):
     search_query = {
@@ -17,10 +18,12 @@ def pop(conditions):
         data = es.search(index='proxies', doc_type='proxy', body=search_query)
         proxies = data['hits']['hits']
 
+        if len(proxies) == 0:
+            raise NoSuchProxyError('No proxy satisfying given conditions.')
         # Randomly select it
         proxy = choice(proxies)
         ip = proxy['_id']
-        print('Selected proxy:', proxy)
+        # print('Selected proxy:', proxy)
         # Remove it from proxies index
         es.delete(index='proxies', doc_type='proxy', id=ip)
 
