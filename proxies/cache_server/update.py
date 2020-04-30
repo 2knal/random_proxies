@@ -19,7 +19,7 @@ def _check():
     add_back_proxies = []
     if recents:
         for proxy in recents:
-            proxy = proxy['_source']['doc']
+            proxy = proxy['_source']
             try:
                 # Only if it works
                 if is_good_proxy(ip, protocol=protocol):

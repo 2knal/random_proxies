@@ -13,9 +13,9 @@ def add(proxies, index):
         {   
             "_index": index,
             "_type" : "proxy", 
-            "op_type": "create",
             "_id" : proxy['ip address'] + ':' + proxy['port'], 
-            "doc": proxy
+            "_source": proxy,
+            "op_type": "create"
         }
         for proxy in proxies
     ]

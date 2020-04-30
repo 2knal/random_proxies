@@ -6,13 +6,8 @@ from os.path import join, dirname
 from dotenv import load_dotenv
 from elasticsearch import Elasticsearch
 
-from ..random_proxies.settings import BASE_URL, SSL_URL, SOCKS_URL
-from ..random_proxies.log import logger
-from ..random_proxies.utils import fetch, parse_response
-from ..random_proxies.proxy_health import is_good_proxy
-
 env_path = join(dirname(__file__), '.env')
-print('ENV PATH:', env_path)
+# print('ENV PATH:', env_path)
 load_dotenv(env_path)
 
 # GLOBALS
@@ -31,3 +26,8 @@ if not es.indices.exists(index='proxies'):
 
 if not es.indices.exists(index='recents'):
     es.indices.create(index='recents', ignore=400)
+
+from proxies.random_proxies.settings import BASE_URL, SSL_URL, SOCKS_URL
+from proxies.random_proxies.log import logger
+from proxies.random_proxies.utils import fetch, parse_response
+from proxies.random_proxies.proxy_health import is_good_proxy
