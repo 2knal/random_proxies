@@ -30,10 +30,12 @@ def _check():
         count += 1
         print('Proxy count:', count)
         ip = proxy['ip address'] + ':' + proxy['port']
+        protocol = ('http', 'https')[proxy['https'] == 'yes']
+
         # Implies SOCKS proxy
         if 'version' in proxy:
             ip = proxy['version'] + '://' + ip
-        protocol = ('http', 'https')[proxy['https'] == 'yes']
+            protocol = 'http'
 
         try:
             # Only if it works

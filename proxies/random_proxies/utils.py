@@ -130,9 +130,8 @@ def parse_values(body, fields, conditions):
             else:
                 flag = True
                 break
-        # print()
+            
         if not flag:
-            # print('Proxy:', proxy)
             proxies.append(proxy)
     return proxies
 

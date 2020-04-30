@@ -12,7 +12,7 @@ def _select(proxies):
     if len(proxies) == 0:
         raise NoSuchProxyError('No proxy satisfying given conditions.')
     proxy = choice(proxies)
-    # print('Selected proxy:', proxy, '\nLength:', len(proxies))
+    print('Selected proxy:', proxy, '\nLength:', len(proxies))
     return proxy['ip address'] + ':' + proxy['port']
 
 def random_proxy(
@@ -36,14 +36,15 @@ def random_proxy(
         conditions['anonymity'] = standard
     elif protocol == 'socks':
         url = settings.SOCKS_URL
+        conditions['anonymity'] = standard
         
     if not use_cache:
         res = fetch(url)
-        # print('Conditions:', conditions)
         proxies = parse_response(res, conditions)
         return _select(proxies)
     else:
-        # Fetch from db
+        if protocol == 'socks':
+            conditions['version'] = 'socks4'
         query = {
             'bool': {
                 'must': [
@@ -52,5 +53,5 @@ def random_proxy(
             }   
         }
         print('Query:', query)
+        # Fetch from db
         return pop(query)
-    

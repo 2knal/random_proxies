@@ -12,7 +12,7 @@ def is_good_proxy(ip, protocol='http'):
     proxies = {
         'http': 'http://' + ip,
     }
-    if protocol == 'https' or protocol == 'socks':
+    if protocol == 'https':
         proxies['https'] = 'https://' + ip
 
     url = settings.TEST_URL
