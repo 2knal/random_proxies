@@ -28,7 +28,6 @@ setup(
     include_package_data = True,
     install_requires = [
         "beautifulsoup4==4.9.0",
-        "elasticsearch==7.6.0",
         "lxml==4.5.0",
         "PySocks==1.7.1",
         "python-dotenv==0.13.0",

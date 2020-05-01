@@ -11,14 +11,15 @@ import errno
 import os
 import signal
 import json 
-
+from os.path import dirname, join
 from random_proxies.proxies.log import logger
 from random_proxies.proxies.exception import TimeoutError, CountryCodeError
-import random_proxies.proxies.settings as settings
+from random_proxies.proxies import settings
 
 def country_to_code(country, code):
     mapper = {}
-    with open('c2c.json', 'r') as f:
+    path = join(dirname(__file__), 'c2c.json')
+    with open(path, 'r') as f:
         mapper = json.load(f)
     if mapper[country] == code:
         return True

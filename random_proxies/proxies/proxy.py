@@ -3,7 +3,7 @@ from __future__ import absolute_import, unicode_literals
 
 from random import choice
 
-import random_proxies.proxies.settings as settings
+from random_proxies.proxies import settings
 from random_proxies.proxies.utils import fetch, parse_response, country_to_code
 from random_proxies.proxies.exception import NoSuchProxyError
 from random_proxies.proxies.db import pop
@@ -50,7 +50,7 @@ def random_proxy(
         # County-code matching
         if code != None and country != None:
             if country_to_code(country, code):
-                return pop(conditions)
+                return pop(new_conditions)
 
         # Fetch from db
         return pop(new_conditions)

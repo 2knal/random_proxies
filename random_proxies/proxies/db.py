@@ -1,35 +1,17 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
-from random import choice
-
-from random_proxies.cache import db
-from random_proxies.proxies.log import logger
-from random_proxies.proxies.exception import NoSuchProxyError
+import json
+import requests
+from random_proxies.proxies.settings import CACHE_SERVER_URL
 
 def pop(conditions):
-    # Get proxies which satisfy given conditions
-    proxies_collection = db['proxies']
-    recents_collection = db['recents']
+    query_string = '?'
 
-    proxies = proxies_collection.find(conditions)
-    if proxies.count() == 0:
-        raise NoSuchProxyError('No proxy satisfying given conditions.')
-    
-    # Randomly select it
-    proxies = list(proxies)
-    proxy = choice(proxies)
-    ip = proxy['_id']
-    
-    try:
-        # Remove it from proxies index
-        proxies_collection.delete_one({ '_id': ip })
+    for k, v in conditions.items():
+        query_string += f'{k}={v}&'
+    url = CACHE_SERVER_URL + query_string[:-1]
+    data = requests.get(url).text
+    data = json.loads(data)
 
-        # Add it to recents index
-        recents_collection.insert_one(proxy)
-    except Exception as e:
-        template = 'An exception of type {0} occurred.\nArguments: {1!r}'
-        message = template.format(type(e).__name__, e.args)
-        logger.error(message)
-
-    return ip
+    return data['ip']
