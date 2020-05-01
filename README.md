@@ -9,7 +9,7 @@
 
 # random_proxies
 
-### Python package to generate a random proxy on the fly!
+Python package to generate a random proxy on the fly!
 
 ## Features
 
@@ -23,13 +23,16 @@
 
 
 ## Example usage
-
-```bash
-  git clone https://github.com/2knal/random_proxies.git`
-  cd random_proxies/ 
-  pip install -r requirements.txt 
+<!-- ```bash
+  pip install random_proxies
 ```
-Open python interpreter. (Supports version 3.4+)
+or  -->
+```bash
+  $ git clone https://github.com/2knal/random_proxies.git`
+  $ cd random_proxies/ 
+  $ pip install -r requirements.txt 
+```
+Open python interpreter. (Supports version 3.7+)
 
 ```python
 >>> from random_proxies import random_proxy
@@ -41,6 +44,24 @@ Refer more examples [here](./examples/)
 
 ## TODO
 - [ ] Publish package version 0.0.1 
+- [ ] Port to MongoDB
 - [ ] Scrape proxies from other sources
 - [ ] Add support for SOCKS version 5
+- [ ] Implement REST API to allow other languages to interface with it
+- [ ] Setup documentation page
 - [ ] Add unit tests
+
+------------------------------------------
+
+### Contributing
+
+ * We are open to `enhancements` & `bug-fixes` 😊. Take a look [here](./Contributing.md) to get started
+ * Feel free to add issues and submit patches
+
+
+### Author
+Kunal Sonawane - [2knal](https://github.com/2knal)
+
+------------------------------------------
+### License
+This project is licensed under the MIT - see the [LICENSE](./LICENSE.txt) file for details.
