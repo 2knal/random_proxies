@@ -4,7 +4,7 @@ from __future__ import absolute_import, unicode_literals
 from random import choice
 
 import random_proxies.proxies.settings as settings
-from random_proxies.proxies.utils import fetch, parse_response
+from random_proxies.proxies.utils import fetch, parse_response, country_to_code
 from random_proxies.proxies.exception import NoSuchProxyError
 from random_proxies.proxies.db import pop
 
@@ -18,7 +18,7 @@ def _select(proxies):
 def random_proxy(
     use_cache=True,
     protocol='http',
-    standard='anonymous',
+    standard=None,
     country=None,
     code=None
 ):
@@ -43,13 +43,14 @@ def random_proxy(
     else:
         if protocol == 'socks':
             conditions['version'] = 'socks4'
-        query = {
-            'bool': {
-                'must': [
-                    { 'match': { k:v } } for k, v in conditions.items() if v != None
-                ]
-            }   
-        }
-        
+
+        # Removing None conditions
+        new_conditions = { k:v for k, v in conditions.items() if v != None}
+            
+        # County-code matching
+        if code != None and country != None:
+            if country_to_code(country, code):
+                return pop(conditions)
+
         # Fetch from db
-        return pop(query)
+        return pop(new_conditions)

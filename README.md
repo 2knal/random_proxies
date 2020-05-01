@@ -43,8 +43,10 @@ Open python interpreter. (Supports version 3.7+)
 Refer more examples [here](./examples/)
 
 ## TODO
+
+- [x] Port to MongoDB
 - [ ] Publish package version 0.0.1 
-- [ ] Port to MongoDB
+- [ ] Return meta data, response structure found [here](./random_proxies/cache/README.md)
 - [ ] Scrape proxies from other sources
 - [ ] Add support for SOCKS version 5
 - [ ] Implement REST API to allow other languages to interface with it

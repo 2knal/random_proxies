@@ -1,16 +1,15 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
-from elasticsearch import helpers
+# Will run after every 2 hours to add new proxies to 'proxies' collection
 
 from time import time
 
-from random_proxies.cache_server.config import es
-from random_proxies.cache_server.config import fetch, parse_response
-from random_proxies.cache_server.config import is_good_proxy
-from random_proxies.cache_server.config import logger
-from random_proxies.cache_server.utils import add
-from random_proxies.cache_server.config import BASE_URL, SSL_URL, SOCKS_URL    
+from random_proxies.cache import db
+from random_proxies.cache import fetch, parse_response
+from random_proxies.cache import is_good_proxy
+from random_proxies.cache import logger
+from random_proxies.cache import BASE_URL, SSL_URL, SOCKS_URL    
 
 def _check():
     urls = [BASE_URL, SSL_URL, SOCKS_URL]
@@ -19,13 +18,20 @@ def _check():
     # Fetch all the proxies from these urls
     for url in urls:
         res = fetch(url)
-        # Passing empty conditions so that
+        # Passing empty conditions so that all proxies will be fetched
         proxies.extend(parse_response(res, {}))
 
+    count = 0
+
+    # proxies collection
+    proxies_collection = db['proxies']
+
     # Check if they work
-    working_proxies = []
     for proxy in proxies:
         ip = proxy['ip address'] + ':' + proxy['port']
+
+        # Adding _id to proxy document
+        proxy['_id'] = ip
         protocol = ('http', 'https')[proxy['https'] == 'yes']
 
         # Implies SOCKS proxy
@@ -36,17 +42,17 @@ def _check():
         try:
             # Only if it works
             if is_good_proxy(ip, protocol=protocol):
-                working_proxies.append(proxy)
+
+                # Add it to proxies collection
+                proxies_collection.insert_one(proxy)
+                
         except Exception as e:
             template = 'An exception of type {0} occurred.\nArguments: {1!r}'
             message = template.format(type(e).__name__, e.args)
             logger.error(message)
-    
-    return working_proxies
 
 if __name__ == '__main__':
     tic = time()
-    proxies = _check()
-    add(proxies, 'proxies')
+    _check()
     tac = time()
     print('Total time: [routine]', tac - tic)

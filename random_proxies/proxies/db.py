@@ -3,32 +3,33 @@ from __future__ import absolute_import, unicode_literals
 
 from random import choice
 
-from random_proxies.cache_server.config import es
-from random_proxies.cache_server.config import MAX_SIZE
+from random_proxies.cache import db
 from random_proxies.proxies.log import logger
 from random_proxies.proxies.exception import NoSuchProxyError
 
 def pop(conditions):
-    search_query = {
-        'size': MAX_SIZE,
-        'query': conditions
-    }
-
     # Get proxies which satisfy given conditions
-    data = es.search(index='proxies', doc_type='proxy', body=search_query)
-    proxies = data['hits']['hits']
+    proxies_collection = db['proxies']
+    recents_collection = db['recents']
 
-    if len(proxies) == 0:
+    proxies = proxies_collection.find(conditions)
+    if proxies.count() == 0:
         raise NoSuchProxyError('No proxy satisfying given conditions.')
     
     # Randomly select it
+    proxies = list(proxies)
     proxy = choice(proxies)
     ip = proxy['_id']
     
-    # Remove it from proxies index
-    es.delete(index='proxies', doc_type='proxy', id=ip)
+    try:
+        # Remove it from proxies index
+        proxies_collection.delete_one({ '_id': ip })
 
-    # Add it to recents index
-    es.index(index='recents', doc_type='proxy', id=ip, body=proxy['_source'])
+        # Add it to recents index
+        recents_collection.insert_one(proxy)
+    except Exception as e:
+        template = 'An exception of type {0} occurred.\nArguments: {1!r}'
+        message = template.format(type(e).__name__, e.args)
+        logger.error(message)
 
     return ip

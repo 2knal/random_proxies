@@ -114,7 +114,7 @@ def parse_values(body, fields, conditions):
 
             elif field == 'code':
                 # First code must match country if both are not none
-                if conditions['code'] == None:
+                if conditions.get('code') == None:
                     proxy[field] = value
                 else:
                     if conditions.get('country') and country_to_code(conditions.get('country'), conditions.get('code')):
@@ -122,8 +122,11 @@ def parse_values(body, fields, conditions):
                     elif conditions.get('code'):
                         proxy[field] = value
 
-            elif field == 'anonymity' and conditions.get('anonymity') == value:
-                proxy[field] = value
+            elif field == 'anonymity':
+                if conditions.get('anonymity') == None:
+                    proxy[field] = value
+                elif conditions.get('anonymity') == value:
+                    proxy[field] = value
 
             elif field in ['ip address', 'port', 'google', 'version']:
                 proxy[field] = value

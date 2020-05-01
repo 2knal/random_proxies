@@ -10,6 +10,7 @@
 ### Proxy structure
 
 ##### HTTP / HTTPS Proxy
+
 ```json
 {
     "ip address": "185.140.234.18", 
@@ -24,6 +25,7 @@
 ```
 
 ##### SOCKS Proxy
+
 ```json
 {
     "ip address": "185.140.234.18", 
@@ -36,10 +38,26 @@
     "last checked": "5 minutes ago"
 }
 ```
+
+##### Improved response structure
+
+```json
+{
+    "ip": "185.140.234.18:8080", 
+    "meta": {
+        "code": "ir", 
+        "country": "iran", 
+        "anonymity": "transparent", 
+        "version": "socks4", 
+        "https": "no"
+    }
+}
+```
+
 ### Procedures to run
 
 > Note: Adding cronjobs for below routines.
 
-- `routine.py`: Run after every 2 hours, every day
-- `update.py`: Run after every 6 hours, every day
-- `clean.py`: Run every day at 12 am
+- `main/routine.py`: Run after every 2 hours, every day
+- `main/update.py`: Run after every 6 hours, every day
+- `main/clean.py`: Run every day at 12 am
