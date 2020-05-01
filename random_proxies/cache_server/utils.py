@@ -5,8 +5,8 @@ from elasticsearch import helpers
 
 from time import time
 
-from proxies.cache_server.config import es
-from proxies.cache_server.config import logger
+from random_proxies.cache_server.config import es
+from random_proxies.cache_server.config import logger
 
 def add(proxies, index):
     actions = [
@@ -20,7 +20,6 @@ def add(proxies, index):
         for proxy in proxies
     ]
     if proxies:
-        print('# of working proxies: ', len(proxies))
         try:
             tic = time()
             helpers.bulk(es, actions)

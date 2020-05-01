@@ -3,16 +3,16 @@ from __future__ import absolute_import, unicode_literals
 
 from random import choice
 
-import proxies.random_proxies.settings as settings
-from proxies.random_proxies.utils import fetch, parse_response
-from proxies.random_proxies.exception import NoSuchProxyError
-from proxies.random_proxies.db import pop
+import random_proxies.proxies.settings as settings
+from random_proxies.proxies.utils import fetch, parse_response
+from random_proxies.proxies.exception import NoSuchProxyError
+from random_proxies.proxies.db import pop
 
 def _select(proxies):
     if len(proxies) == 0:
         raise NoSuchProxyError('No proxy satisfying given conditions.')
     proxy = choice(proxies)
-    # print('Selected proxy:', proxy, '\nLength:', len(proxies))
+    
     return proxy['ip address'] + ':' + proxy['port']
 
 def random_proxy(
@@ -25,18 +25,16 @@ def random_proxy(
     conditions = {
         'country': country,
         'https': ('yes', 'no')[protocol == 'http'],
-        'code': code
+        'code': code,
+        'anonymity': standard
     }
 
     if protocol == 'http':
         url = settings.BASE_URL
-        conditions['anonymity'] = standard
     elif protocol == 'https':
         url = settings.SSL_URL
-        conditions['anonymity'] = standard
     elif protocol == 'socks':
         url = settings.SOCKS_URL
-        conditions['anonymity'] = standard
         
     if not use_cache:
         res = fetch(url)
@@ -52,6 +50,6 @@ def random_proxy(
                 ]
             }   
         }
-        # print('Query:', query)
+        
         # Fetch from db
         return pop(query)

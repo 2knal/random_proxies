@@ -5,14 +5,15 @@ from elasticsearch import helpers
 
 from time import time
 
-from proxies.cache_server.config import es
-from proxies.cache_server.config import fetch, parse_response
-from proxies.cache_server.config import is_good_proxy
-from proxies.cache_server.config import logger
-from proxies.cache_server.utils import add
-from proxies.cache_server.config import BASE_URL, SSL_URL, SOCKS_URL, MAX_SIZE   
+from random_proxies.cache_server.config import es
+from random_proxies.cache_server.config import fetch, parse_response
+from random_proxies.cache_server.config import is_good_proxy
+from random_proxies.cache_server.config import logger
+from random_proxies.cache_server.utils import add
+from random_proxies.cache_server.config import BASE_URL, SSL_URL, SOCKS_URL, MAX_SIZE   
 
 def _check():
+    
     # Check if proxies are working in recents index
     data = es.search(index='recents', doc_type='proxy', body={'size': })
     recents = data['hits']['hits']

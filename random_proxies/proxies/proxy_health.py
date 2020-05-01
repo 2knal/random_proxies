@@ -3,15 +3,16 @@ from __future__ import absolute_import, unicode_literals
 
 import requests
 
-import proxies.random_proxies.settings as settings
-from proxies.random_proxies.utils import timeout
-from proxies.random_proxies.log import logger
+import random_proxies.proxies.settings as settings
+from random_proxies.proxies.utils import timeout
+from random_proxies.proxies.log import logger
 
 @timeout(seconds=settings.HTTP_TIMEOUT)
 def is_good_proxy(ip, protocol='http'):   
     proxies = {
         'http': 'http://' + ip,
     }
+    
     if protocol == 'https':
         proxies['https'] = 'https://' + ip
 

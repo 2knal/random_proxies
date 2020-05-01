@@ -5,30 +5,26 @@ from elasticsearch import helpers
 
 from time import time
 
-from proxies.cache_server.config import es
-from proxies.cache_server.config import fetch, parse_response
-from proxies.cache_server.config import is_good_proxy
-from proxies.cache_server.config import logger
-from proxies.cache_server.utils import add
-from proxies.cache_server.config import BASE_URL, SSL_URL, SOCKS_URL    
+from random_proxies.cache_server.config import es
+from random_proxies.cache_server.config import fetch, parse_response
+from random_proxies.cache_server.config import is_good_proxy
+from random_proxies.cache_server.config import logger
+from random_proxies.cache_server.utils import add
+from random_proxies.cache_server.config import BASE_URL, SSL_URL, SOCKS_URL    
 
 def _check():
     urls = [BASE_URL, SSL_URL, SOCKS_URL]
     proxies = []
+
     # Fetch all the proxies from these urls
     for url in urls:
-        print('URL:', url)
         res = fetch(url)
         # Passing empty conditions so that
         proxies.extend(parse_response(res, {}))
 
-    print('Total proxies: ', len(proxies))
     # Check if they work
     working_proxies = []
-    count = 0
     for proxy in proxies:
-        count += 1
-        print('Proxy count:', count)
         ip = proxy['ip address'] + ':' + proxy['port']
         protocol = ('http', 'https')[proxy['https'] == 'yes']
 

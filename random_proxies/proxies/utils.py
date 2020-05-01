@@ -12,9 +12,9 @@ import os
 import signal
 import json 
 
-from proxies.random_proxies.log import logger
-from proxies.random_proxies.exception import TimeoutError, CountryCodeError
-import proxies.random_proxies.settings as settings
+from random_proxies.proxies.log import logger
+from random_proxies.proxies.exception import TimeoutError, CountryCodeError
+import random_proxies.proxies.settings as settings
 
 def country_to_code(country, code):
     mapper = {}
@@ -96,6 +96,7 @@ def parse_values(body, fields, conditions):
                 temp = field.split()
                 if temp[1].startswith('second'):
                     proxy[field] = value
+                    
                 # Taking only proxies scanned before less than 20 minutes
                 elif temp[1].startswith('minute') and int(temp[0]) < settings.LAST_CHECKED_THRESHOLD:
                     proxy[field] = value
