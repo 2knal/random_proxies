@@ -4,14 +4,22 @@ from __future__ import absolute_import, unicode_literals
 from random_proxies.cache import db
 from random_proxies.cache import logger
 
+import os
+from os.path import join, dirname
 from random import choice
 from flask import Flask, request, jsonify
+from markdown import markdown
 
 app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return "It works!"
+    try:
+        with open(join(dirname(__file__), 'README.md')) as f:
+            markdown_file = f.read()
+            return markdown(markdown_file)
+    except Exception as e:
+        return "It works"
 
 @app.route('/fetch', methods=['GET'])
 def fetch():
