@@ -22,7 +22,7 @@ def fetch():
     # Fetch from proxies
     proxies = proxies_collection.find(conditions)
     if proxies.count() == 0:
-        raise NoSuchProxyError('No proxy satisfying given conditions.')
+        return jsonify({ 'success': 'no' })
     
     # Randomly select it
     proxies = list(proxies)
@@ -36,7 +36,7 @@ def fetch():
         # Add it to recents index
         recents_collection.insert_one(proxy)
 
-        return jsonify({ 'ip': ip })
+        return jsonify({ 'ip': ip, 'success': 'yes' })
 
     except Exception as e:
         template = 'An exception of type {0} occurred.\nArguments: {1!r}'

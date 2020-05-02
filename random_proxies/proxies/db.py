@@ -3,7 +3,9 @@ from __future__ import absolute_import, unicode_literals
 
 import json
 import requests
+
 from random_proxies.proxies.settings import CACHE_SERVER_URL
+from random_proxies.proxies.exception import NoSuchProxyError
 
 def pop(conditions):
     query_string = '?'
@@ -14,4 +16,7 @@ def pop(conditions):
     data = requests.get(url).text
     data = json.loads(data)
 
-    return data['ip']
+    if data['success'] == 'yes':
+        return data['ip']
+    else:
+        raise NoSuchProxyError('No proxy satisfying given conditions.')

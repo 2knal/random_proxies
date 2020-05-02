@@ -19,14 +19,15 @@ Python package to generate a random proxy on the fly!
 - Fetch elite / transparent / anonymous proxies respectively.
 - Fetch directly from [free-proxy-list](https://free-proxy-list.net).
 - For better response time, fetch from an elasticsearch `cache_server`.
-- `cache_server` is updated via routines described [here](./random_proxies/cache_server/README.md)
+- `cache_server` is updated via routines described [here](./random_proxies/cache/README.md)
 
 
 ## Example usage
-<!-- ```bash
-  pip install random_proxies
+
+```bash
+  pip install random-proxies
 ```
-or  -->
+or 
 ```bash
   $ git clone https://github.com/2knal/random_proxies.git`
   $ cd random_proxies/ 
@@ -40,16 +41,16 @@ Open python interpreter. (Supports version 3.7+)
 '23.101.2.247:81'
 ```
 
-Refer more examples [here](./examples/)
+Refer more examples [here](./examples/example.py)
 
 ## TODO
 
 - [x] Port to MongoDB
-- [ ] Publish package version 0.0.1 
+- [x] Publish package version 0.0.2 
 - [ ] Return meta data, response structure found [here](./random_proxies/cache/README.md)
 - [ ] Scrape proxies from other sources
 - [ ] Add support for SOCKS version 5
-- [ ] Implement REST API to allow other languages to interface with it
+- [x] Implement REST API to allow other languages to interface with it
 - [ ] Setup documentation page
 - [ ] Add unit tests
 
