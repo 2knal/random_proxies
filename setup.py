@@ -27,10 +27,10 @@ setup(
     packages = find_packages(),
     include_package_data = True,
     install_requires = [
-        "beautifulsoup4==4.9.0",
-        "lxml==4.5.0",
-        "PySocks==1.7.1",
-        "python-dotenv==0.13.0",
-        "requests==2.23.0"
+        "beautifulsoup4>=4.9.0",
+        "lxml>=4.5.0",
+        "PySocks>=1.7.1",
+        "python-dotenv>=0.13.0",
+        "requests>=2.23.0"
     ]
 )
