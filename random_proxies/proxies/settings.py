@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import, unicode_literals
 
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 
 BASE_URL = 'https://free-proxy-list.net/'
 SSL_URL = 'http://sslproxies.org/'
@@ -13,3 +13,4 @@ HTTP_TIMEOUT = 6
 HTTP_RETRIES = 3
 
 LAST_CHECKED_THRESHOLD = 20
+CACHE_SERVER_URL = 'http://54.162.135.16:5000/fetch'
