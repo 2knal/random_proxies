@@ -1,9 +1,9 @@
-'''
+"""
 (Once the package is published)
-pip install random-proxies 
-    or 
+pip install random-proxies
+    or
 Follow example usage to import the package
-'''
+"""
 
 from random_proxies import random_proxy
 

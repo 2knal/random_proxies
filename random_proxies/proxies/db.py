@@ -7,6 +7,7 @@ import requests
 from random_proxies.proxies.settings import CACHE_SERVER_URL
 from random_proxies.proxies.exception import NoSuchProxyError
 
+
 def pop(conditions):
     query_string = '?'
 

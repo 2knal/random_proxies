@@ -10,11 +10,12 @@ from functools import wraps
 import errno
 import os
 import signal
-import json 
+import json
 from os.path import dirname, join
 from random_proxies.proxies.log import logger
 from random_proxies.proxies.exception import TimeoutError, CountryCodeError
 from random_proxies.proxies import settings
+
 
 def country_to_code(country, code):
     mapper = {}
@@ -25,11 +26,13 @@ def country_to_code(country, code):
         return True
     raise CountryCodeError('Country code does not match with the added country.')
 
+
 # https://stackoverflow.com/questions/2281850/timeout-function-if-it-takes-too-long-to-finish
 def timeout(seconds=10, error_message=os.strerror(errno.ETIME)):
     def decorator(func):
         def _handle_timeout(signum, frame):
             raise TimeoutError(error_message)
+
         def wrapper(*args, **kwargs):
             signal.signal(signal.SIGALRM, _handle_timeout)
             signal.alarm(seconds)
@@ -38,14 +41,17 @@ def timeout(seconds=10, error_message=os.strerror(errno.ETIME)):
             finally:
                 signal.alarm(0)
             return result
+
         return wraps(func)(wrapper)
+
     return decorator
+
 
 # https://www.peterbe.com/plog/best-practice-with-retries-with-requests
 def fetch(url=settings.BASE_URL,
-    suffix='',
-    backoff_factor=settings.HTTP_DELAY,
-    status_forcelist=(500, 502, 504)):
+          suffix='',
+          backoff_factor=settings.HTTP_DELAY,
+          status_forcelist=(500, 502, 504)):
     try:
         res = None
         with Session() as sess:
@@ -68,6 +74,7 @@ def fetch(url=settings.BASE_URL,
         logger.error(message)
         return None
 
+
 def parse_header(header):
     # Fetching field names
     fields = []
@@ -75,6 +82,7 @@ def parse_header(header):
         name = field.get_text().strip()
         fields.append(name)
     return fields
+
 
 # Do some condition checking here
 def parse_values(body, fields, conditions):
@@ -97,14 +105,14 @@ def parse_values(body, fields, conditions):
                 temp = field.split()
                 if temp[1].startswith('second'):
                     proxy[field] = value
-                    
+
                 # Taking only proxies scanned before less than 20 minutes
                 elif temp[1].startswith('minute') and int(temp[0]) < settings.LAST_CHECKED_THRESHOLD:
                     proxy[field] = value
 
             elif field == 'country':
                 # Check if code is added or not
-                if conditions.get('country')== None:
+                if conditions.get('country') is None:
                     proxy[field] = value
                 else:
                     if value.startswith(conditions.get('country')):
@@ -115,7 +123,7 @@ def parse_values(body, fields, conditions):
 
             elif field == 'code':
                 # First code must match country if both are not none
-                if conditions.get('code') == None:
+                if conditions.get('code') is None:
                     proxy[field] = value
                 else:
                     if conditions.get('country') and country_to_code(conditions.get('country'), conditions.get('code')):
@@ -124,7 +132,7 @@ def parse_values(body, fields, conditions):
                         proxy[field] = value
 
             elif field == 'anonymity':
-                if conditions.get('anonymity') == None:
+                if conditions.get('anonymity') is None:
                     proxy[field] = value
                 elif conditions.get('anonymity') == value:
                     proxy[field] = value
@@ -135,10 +143,11 @@ def parse_values(body, fields, conditions):
             else:
                 flag = True
                 break
-            
+
         if not flag:
             proxies.append(proxy)
     return proxies
+
 
 # TODO
 # Add to db after giving the response

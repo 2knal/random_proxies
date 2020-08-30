@@ -8,19 +8,21 @@ from random_proxies.proxies.utils import fetch, parse_response, country_to_code
 from random_proxies.proxies.exception import NoSuchProxyError
 from random_proxies.proxies.db import pop
 
+
 def _select(proxies):
     if len(proxies) == 0:
         raise NoSuchProxyError('No proxy satisfying given conditions.')
     proxy = choice(proxies)
-    
+
     return proxy['ip address'] + ':' + proxy['port']
 
+
 def random_proxy(
-    use_cache=True,
-    protocol='http',
-    standard=None,
-    country=None,
-    code=None
+        use_cache=True,
+        protocol='http',
+        standard=None,
+        country=None,
+        code=None
 ):
     conditions = {
         'country': country,
@@ -35,7 +37,7 @@ def random_proxy(
         url = settings.SSL_URL
     elif protocol == 'socks':
         url = settings.SOCKS_URL
-        
+
     if not use_cache:
         res = fetch(url)
         proxies = parse_response(res, conditions)
@@ -45,10 +47,10 @@ def random_proxy(
             conditions['version'] = 'socks4'
 
         # Removing None conditions
-        new_conditions = { k:v for k, v in conditions.items() if v != None}
-            
+        new_conditions = {k: v for k, v in conditions.items() if v is not None}
+
         # County-code matching
-        if code != None and country != None:
+        if code is not None and country is not None:
             if country_to_code(country, code):
                 return pop(new_conditions)
 

@@ -9,17 +9,18 @@ from random_proxies.cache import db
 from random_proxies.cache import is_good_proxy
 from random_proxies.cache import logger
 
+
 def _check():
     recents_collection = db['recents']
     proxies_collection = db['proxies']
 
     # Check if proxies are working in recents index
-    recents = collection.find({})
+    recents = db.collection.find({})
     for proxy in recents:
 
         ip = proxy['_id']
         protocol = ('http', 'https')[proxy['https'] == 'yes']
-        
+
         # Implies SOCKS proxy
         if 'version' in proxy:
             ip = proxy['version'] + '://' + ip
@@ -40,7 +41,7 @@ def _check():
             template = 'An exception of type {0} occurred.\nArguments: {1!r}'
             message = template.format(type(e).__name__, e.args)
             logger.error(message)
-            
+
 
 if __name__ == '__main__':
     tic = time()
