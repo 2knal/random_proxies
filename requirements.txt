@@ -15,5 +15,5 @@ PySocks==1.7.1
 python-dotenv==0.13.0
 requests==2.23.0
 soupsieve==2.0
-urllib3==1.25.9
+urllib3==1.26.5
 Werkzeug==1.0.1
